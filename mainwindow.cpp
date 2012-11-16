@@ -144,25 +144,6 @@ bool MainWindow::generateImageAndBoxData(const QString &text, const QFont &font,
         }
     }
 
-    for (int ii = 10; ii < 20; ii++) {
-        QRect r;
-        painter.drawText(QRect(x, y, image.width()-x, image.height()-y), 0, QString("%1").arg(ii), &r);
-
-        x += r.width() * 3 / 2;
-        if (x >= textBoundingBox.right()) {
-            x = textBoundingBox.left();
-            y += fm.lineSpacing() * 3 / 2;
-
-            if (y >= textBoundingBox.bottom() - fm.lineSpacing()) {
-                QMessageBox::critical(this, "", tr("Text is too big for the picture"));
-                return false;
-            }
-        }
-
-        BoxDataItem item = { QString("%1").arg(ii), r };
-        boxData.append(item);
-    }
-
     return true;
 }
 
