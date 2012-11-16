@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBoxMonospace, SIGNAL(toggled(bool)), this, SLOT(updatePlainTextEditFontSettings()));
     connect(ui->fontComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updatePlainTextEditFontSettings()));
     connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePlainTextEditFontSettings()));
+    ui->lineEditImageWidth->setValidator(new QIntValidator(1, 99999));
+    ui->lineEditImageHeight->setValidator(new QIntValidator(1, 99999));
 
     QSettings settings;
     ui->plainTextEdit->setPlainText(settings.value("Last Text").toString());
