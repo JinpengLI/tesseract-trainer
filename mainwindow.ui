@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>526</width>
-    <height>323</height>
+    <width>549</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,67 +16,97 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QFontComboBox" name="fontComboBox"/>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spinBox">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBoxBold">
-        <property name="text">
-         <string>Bold</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBoxItalic">
-        <property name="text">
-         <string>Italic</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBoxMonospace">
-        <property name="text">
-         <string>Monospace</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBoxAntiAliasing">
-        <property name="text">
-         <string>Anti-aliasing</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Font Settings</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QFontComboBox" name="fontComboBox"/>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxBold">
+         <property name="text">
+          <string>Bold</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxItalic">
+         <property name="text">
+          <string>Italic</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxMonospace">
+         <property name="text">
+          <string>Monospace</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxAntiAliasing">
+         <property name="text">
+          <string>Anti-aliasing</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QCheckBox" name="checkBox">
-        <property name="text">
-         <string>Show Bounding Boxes</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Generate</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Image Settings</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Width:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditImageWidth"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Height:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditImageHeight"/>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item>
      <widget class="QPlainTextEdit" name="plainTextEdit"/>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="text">
+       <string>Show Bounding Boxes</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Generate</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -85,7 +115,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>526</width>
+     <width>549</width>
      <height>21</height>
     </rect>
    </property>

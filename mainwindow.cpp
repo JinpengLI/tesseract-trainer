@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->checkBoxItalic->setChecked(settings.value("Italic", false).toBool());
     ui->checkBoxMonospace->setChecked(settings.value("Monospace", false).toBool());
     ui->checkBoxAntiAliasing->setChecked(settings.value("Antialiasing", true).toBool());
+    ui->lineEditImageWidth->setText(settings.value("Image Width", 612).toString());
+    ui->lineEditImageHeight->setText(settings.value("Image Height", 792).toString());
     QFont font;
     if (font.fromString(settings.value("Font").toString()))
         ui->fontComboBox->setCurrentFont(font);
@@ -40,6 +42,8 @@ MainWindow::~MainWindow()
     settings.setValue("Italic", ui->checkBoxItalic->isChecked());
     settings.setValue("Monospace", ui->checkBoxMonospace->isChecked());
     settings.setValue("Antialiasing", ui->checkBoxAntiAliasing->isChecked());
+    settings.setValue("Image Width", ui->lineEditImageWidth->text());
+    settings.setValue("Image Height", ui->lineEditImageHeight->text());
     delete ui;
 }
 
@@ -64,7 +68,7 @@ struct BoxDataItem
 void MainWindow::on_pushButton_clicked()
 {
     QList<BoxDataItem> boxData;
-    QImage image;
+    QImage image(ui->lineEditImageWidth->text().toInt(), ui->lineEditImageHeight->text().toInt(), QImage::Format_RGB32);
     QFont font = ui->plainTextEdit->font();
 //    font.setPixelSize(font.pointSize() * 300 / 72);
     if (!generateImageAndBoxData(ui->plainTextEdit->toPlainText(), font, image, boxData))
@@ -96,7 +100,6 @@ void MainWindow::on_pushButton_clicked()
 
 bool MainWindow::generateImageAndBoxData(const QString &text, const QFont &font, QImage &image, QList<BoxDataItem> &boxData)
 {
-    image = QImage(5100*2, 6600*2, QImage::Format_RGB32);
     image.fill(Qt::white);
 
     QPainter painter(&image);

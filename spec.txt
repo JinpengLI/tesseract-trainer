@@ -2,7 +2,7 @@ The program creates the box/tiff pairs needed for training Tesseract OCR.
 
 The input of the program comes from a plain text edit control. The text from that control is then rendered onto an image, and the resulting image and *.box file are saved in a directory chosen by the user.
 
-These font settings can be specified by the user - font name, font size in points, bold, italic, monospace and anti-aliasing. The output image resolution is fixed in the source code and cannot be changed.
+These font settings can be specified by the user - font name, font size in points, bold, italic, monospace and anti-aliasing. The output image resolution can be specified by the user.
 
 The program has an option to just show the image and the bounding boxes as red rectangles. The program opens the image in the user's default viewer for TIFF files.
 
@@ -18,6 +18,6 @@ Support full automation of the training process. This means it would call all th
 
 Support specifying multiple characters in a single bounding box - akin to ligatures. This means that instead of giving 2 bounding boxes for the 2 characters, it gives a single bounding box, but specifies the 2 characters as a character.
 
-Support specifying the size of the image in pixels.
-
 Support specifying the DPI at which the text is written.
+
+Support viewing tif/box pairs where the boxes are applied as red rectangles.
