@@ -16,6 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(ui->checkBoxAntiAliasing, SIGNAL(toggled(bool)), this, SLOT(updatePlainTextEditFontSettings()));
+    connect(ui->checkBoxBold, SIGNAL(toggled(bool)), this, SLOT(updatePlainTextEditFontSettings()));
+    connect(ui->checkBoxItalic, SIGNAL(toggled(bool)), this, SLOT(updatePlainTextEditFontSettings()));
+    connect(ui->checkBoxMonospace, SIGNAL(toggled(bool)), this, SLOT(updatePlainTextEditFontSettings()));
+    connect(ui->fontComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updatePlainTextEditFontSettings()));
+    connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePlainTextEditFontSettings()));
+
     QSettings settings;
     ui->plainTextEdit->setPlainText(settings.value("Last Text").toString());
     ui->checkBox->setChecked(settings.value("Last Checked", true).toBool());
@@ -45,18 +52,6 @@ MainWindow::~MainWindow()
     settings.setValue("Image Width", ui->lineEditImageWidth->text());
     settings.setValue("Image Height", ui->lineEditImageHeight->text());
     delete ui;
-}
-
-void MainWindow::on_fontComboBox_currentFontChanged(const QFont &f)
-{
-    QFont font = f;
-    font.setPointSize(ui->spinBox->value());
-    font.setBold(ui->checkBoxBold->isChecked());
-    font.setItalic(ui->checkBoxItalic->isChecked());
-    font.setFixedPitch(ui->checkBoxMonospace->isChecked());
-    if (!ui->checkBoxAntiAliasing->isChecked())
-        font.setStyleStrategy(QFont::NoAntialias);
-    ui->plainTextEdit->setFont(font);
 }
 
 struct BoxDataItem
@@ -147,27 +142,14 @@ bool MainWindow::generateImageAndBoxData(const QString &text, const QFont &font,
     return true;
 }
 
-void MainWindow::on_spinBox_valueChanged(int /*arg1*/)
+void MainWindow::updatePlainTextEditFontSettings()
 {
-    on_fontComboBox_currentFontChanged(ui->fontComboBox->currentFont());
-}
-
-void MainWindow::on_checkBoxBold_toggled(bool /*checked*/)
-{
-    on_fontComboBox_currentFontChanged(ui->fontComboBox->currentFont());
-}
-
-void MainWindow::on_checkBoxItalic_toggled(bool /*checked*/)
-{
-    on_fontComboBox_currentFontChanged(ui->fontComboBox->currentFont());
-}
-
-void MainWindow::on_checkBoxMonospace_toggled(bool /*checked*/)
-{
-    on_fontComboBox_currentFontChanged(ui->fontComboBox->currentFont());
-}
-
-void MainWindow::on_checkBoxAntiAliasing_toggled(bool /*checked*/)
-{
-    on_fontComboBox_currentFontChanged(ui->fontComboBox->currentFont());
+    QFont font = ui->fontComboBox->currentFont();
+    font.setPointSize(ui->spinBox->value());
+    font.setBold(ui->checkBoxBold->isChecked());
+    font.setItalic(ui->checkBoxItalic->isChecked());
+    font.setFixedPitch(ui->checkBoxMonospace->isChecked());
+    if (!ui->checkBoxAntiAliasing->isChecked())
+        font.setStyleStrategy(QFont::NoAntialias);
+    ui->plainTextEdit->setFont(font);
 }
