@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>549</width>
+    <width>555</width>
     <height>467</height>
    </rect>
   </property>
@@ -88,6 +88,16 @@
        <item>
         <widget class="QLineEdit" name="lineEditImageHeight"/>
        </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>DPI:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditImageDPI"/>
+       </item>
       </layout>
      </widget>
     </item>
@@ -115,7 +125,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>549</width>
+     <width>555</width>
      <height>21</height>
     </rect>
    </property>
