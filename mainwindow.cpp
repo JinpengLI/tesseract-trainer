@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(updatePlainTextEditFontSettings()));
     ui->lineEditImageWidth->setValidator(new QIntValidator(1, 99999));
     ui->lineEditImageHeight->setValidator(new QIntValidator(1, 99999));
-    ui->lineEditImageDPI->setValidator(new QIntValidator(1, 99999));
+    ui->lineEditImageDPI->setValidator(new QIntValidator(0, 99999));
 
     QSettings settings;
     ui->plainTextEdit->setPlainText(settings.value("Last Text").toString());
@@ -70,8 +70,10 @@ void MainWindow::on_pushButton_clicked()
     QList<BoxDataItem> boxData;
     QImage image(ui->lineEditImageWidth->text().toInt(), ui->lineEditImageHeight->text().toInt(), QImage::Format_RGB32);
     QFont font = ui->plainTextEdit->font();
-    image.setDotsPerMeterX(ui->lineEditImageDPI->text().toInt() * 39.3701);
-    image.setDotsPerMeterY(ui->lineEditImageDPI->text().toInt() * 39.3701);
+    if (int dpi = ui->lineEditImageDPI->text().toInt()) {
+        image.setDotsPerMeterX(dpi * 39.3701);
+        image.setDotsPerMeterY(dpi * 39.3701);
+    }
     if (!generateImageAndBoxData(ui->plainTextEdit->toPlainText(), font, image, boxData))
         return;
     if (ui->checkBox->isChecked()) {
