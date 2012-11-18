@@ -106,7 +106,7 @@ bool MainWindow::generateImageAndBoxData(const QString &text, const QFont &font,
 
     QPainter painter(&image);
     painter.setFont(font);
-    int lineSpacing = painter.fontMetrics().lineSpacing();
+    int lineSpacing = qMax(painter.fontMetrics().lineSpacing(), painter.fontMetrics().boundingRect('0').height());
     QRect textBoundingBox = image.rect().adjusted(lineSpacing*2, lineSpacing*2, -lineSpacing*2, -lineSpacing*2);
     int x = textBoundingBox.left(), y = textBoundingBox.top();
 
