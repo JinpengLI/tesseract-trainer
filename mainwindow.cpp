@@ -137,7 +137,7 @@ bool MainWindow::generateImageAndBoxData(const QString &text, const QFont &font,
             y += lineSpacing * 3 / 2;
         }
 
-        if (y >= textBoundingBox.bottom() - fm.lineSpacing()) {
+        if (y >= textBoundingBox.bottom() - lineSpacing) {
             QMessageBox::critical(this, "", tr("Text is too big for the picture"));
             return false;
         }
