@@ -106,11 +106,8 @@ bool MainWindow::generateImageAndBoxData(const QString &text, const QFont &font,
 
     QPainter painter(&image);
     painter.setFont(font);
-
-    QFontMetrics fm(font);
-
-    QRect textBoundingBox = image.rect().adjusted(fm.lineSpacing()*2, fm.lineSpacing()*2, -fm.lineSpacing()*2, -fm.lineSpacing()*2);
-
+    int lineSpacing = painter.fontMetrics().lineSpacing();
+    QRect textBoundingBox = image.rect().adjusted(lineSpacing*2, lineSpacing*2, -lineSpacing*2, -lineSpacing*2);
     int x = textBoundingBox.left(), y = textBoundingBox.top();
 
     foreach (QChar ch, text) {
@@ -124,7 +121,7 @@ bool MainWindow::generateImageAndBoxData(const QString &text, const QFont &font,
                 return false;
             }
 
-            if (!fm.inFont(ch)) {
+            if (!painter.fontMetrics().inFont(ch)) {
                 QMessageBox::critical(this, "", tr("Invalid character - character missing from font"));
                 return false;
             }
