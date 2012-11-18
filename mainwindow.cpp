@@ -134,7 +134,7 @@ bool MainWindow::generateImageAndBoxData(const QString &text, const QFont &font,
 
         if (ch == '\n' || x >= textBoundingBox.right()) {
             x = textBoundingBox.left();
-            y += fm.lineSpacing() * 3 / 2;
+            y += lineSpacing * 3 / 2;
         }
 
         if (y >= textBoundingBox.bottom() - fm.lineSpacing()) {
