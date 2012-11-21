@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QSettings settings;
     ui->plainTextEdit->setPlainText(settings.value("Last Text").toString());
+    ui->plainTextEdit_2->setPlainText(settings.value("Last Text 2").toString());
     ui->checkBox->setChecked(settings.value("Last Checked", true).toBool());
     ui->spinBox->setValue(settings.value("Font Size", 8).toInt());
     ui->checkBoxBold->setChecked(settings.value("Bold", false).toBool());
@@ -46,6 +47,7 @@ MainWindow::~MainWindow()
 {
     QSettings settings;
     settings.setValue("Last Text", ui->plainTextEdit->toPlainText());
+    settings.setValue("Last Text 2", ui->plainTextEdit_2->toPlainText());
     settings.setValue("Last Checked", ui->checkBox->isChecked());
     settings.setValue("Font Size", ui->spinBox->value());
     settings.setValue("Font", ui->fontComboBox->currentFont().toString());
@@ -69,15 +71,21 @@ void MainWindow::on_pushButton_clicked()
 {
     QList<BoxDataItem> boxData;
     QImage image(ui->lineEditImageWidth->text().toInt(), ui->lineEditImageHeight->text().toInt(), QImage::Format_RGB32);
-    QFont font = ui->plainTextEdit->font();
+    image.fill(Qt::white);
     if (int dpi = ui->lineEditImageDPI->text().toInt()) {
         image.setDotsPerMeterX(dpi * 39.3701);
         image.setDotsPerMeterY(dpi * 39.3701);
     }
-    if (!generateImageAndBoxData(ui->plainTextEdit->toPlainText(), font, image, boxData))
+    QPainter painter(&image);
+    painter.setFont(ui->plainTextEdit->font());
+    int lineSpacing = qMax(painter.fontMetrics().lineSpacing(), painter.fontMetrics().boundingRect('0').height());
+    QRect textBoundingBox = image.rect().adjusted(lineSpacing*2, lineSpacing*2, -lineSpacing*2, -lineSpacing*2);
+    if (!generateImageAndBoxData(painter, ui->plainTextEdit->toPlainText(), ui->plainTextEdit_2->toPlainText().split(' ', QString::SkipEmptyParts), textBoundingBox, boxData))
         return;
+    for (QList<BoxDataItem>::iterator box = boxData.begin(); box != boxData.end(); box++) {
+        box->boundingBox = fitToImage(image, box->boundingBox);
+    }
     if (ui->checkBox->isChecked()) {
-        QPainter painter(&image);
         painter.setPen(Qt::red);
         foreach (BoxDataItem box, boxData)
             painter.drawRect(box.boundingBox);
@@ -100,48 +108,18 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
-bool MainWindow::generateImageAndBoxData(const QString &text, const QFont &font, QImage &image, QList<BoxDataItem> &boxData)
+bool MainWindow::generateImageAndBoxData(QPainter &painter, const QString &text, const QStringList &ligatures, const QRect &textBoundingBox, QList<BoxDataItem> &boxData)
 {
-    image.fill(Qt::white);
-
-    QPainter painter(&image);
-    painter.setFont(font);
     int lineSpacing = qMax(painter.fontMetrics().lineSpacing(), painter.fontMetrics().boundingRect('0').height());
-    QRect textBoundingBox = image.rect().adjusted(lineSpacing*2, lineSpacing*2, -lineSpacing*2, -lineSpacing*2);
-    int x = textBoundingBox.left(), y = textBoundingBox.top();
+    QPoint pos = textBoundingBox.topLeft();
 
-    foreach (QChar ch, text) {
-        if (ch != '\n') {
-            QRect r;
-            painter.drawText(QRect(x, y, image.width()-x, image.height()-y), 0, QString(ch), &r);
-            x += r.width() * 3 / 2;
-
-            if (!r.isValid()) {
-                QMessageBox::critical(this, "", tr("Invalid rectangle"));
-                return false;
-            }
-
-            if (!painter.fontMetrics().inFont(ch)) {
-                QMessageBox::critical(this, "", tr("Invalid character - character missing from font"));
-                return false;
-            }
-
-            if (ch != ' ') {
-                BoxDataItem item = { ch, r };
-                boxData.append(item);
-            }
-        }
-
-        if (ch == '\n' || x >= textBoundingBox.right()) {
-            x = textBoundingBox.left();
-            y += lineSpacing * 3 / 2;
-        }
-
-        if (y >= textBoundingBox.bottom() - lineSpacing) {
-            QMessageBox::critical(this, "", tr("Text is too big for the picture"));
+    foreach (QChar ch, text)
+        if (!drawGlyph(painter, ch, textBoundingBox, pos, lineSpacing, boxData))
             return false;
-        }
-    }
+
+    foreach (QString ligature, ligatures)
+        if (!drawGlyph(painter, ligature, textBoundingBox, pos, lineSpacing, boxData))
+            return false;
 
     return true;
 }
@@ -156,4 +134,68 @@ void MainWindow::updatePlainTextEditFontSettings()
     if (!ui->checkBoxAntiAliasing->isChecked())
         font.setStyleStrategy(QFont::NoAntialias);
     ui->plainTextEdit->setFont(font);
+    ui->plainTextEdit_2->setFont(font);
+}
+
+QRect MainWindow::fitToImage(const QImage &image, const QRect &r)
+{
+    bool initialized = false;
+    int left, right, top, bottom;
+    for (int ii = r.left(); ii <= r.right(); ii++)
+        for (int jj = r.top(); jj <= r.bottom(); jj++) {
+            if (image.pixel(ii, jj) != qRgb(255, 255, 255)) {
+                if (!initialized) {
+                    left = right = ii;
+                    top = bottom = jj;
+                    initialized = true;
+                } else {
+                    if (ii < left)
+                        left = ii;
+                    if (ii > right)
+                        right = ii;
+                    if (jj < top)
+                        top = jj;
+                    if (jj > bottom)
+                        bottom = jj;
+                }
+            }
+        }
+    return QRect(left, top, right-left, bottom-top);
+}
+
+bool MainWindow::drawGlyph(QPainter &painter, const QString &text, const QRect &textBoundingBox, QPoint &pos, int lineSpacing, QList<BoxDataItem> &boxData)
+{
+    if (text != "\n") {
+        foreach (QChar ch, text)
+            if (!painter.fontMetrics().inFont(ch)) {
+                QMessageBox::critical(this, "", tr("Invalid character - character missing from font"));
+                return false;
+            }
+
+        QRect r;
+        painter.drawText(QRect(pos.x(), pos.y(), textBoundingBox.width()-pos.x(), textBoundingBox.height()-pos.y()), 0, text, &r);
+        pos.rx() += r.width();
+
+        if (!r.isValid()) {
+            QMessageBox::critical(this, "", tr("Invalid rectangle"));
+            return false;
+        }
+
+        if (text != " ") {
+            BoxDataItem item = { text, r };
+            boxData.append(item);
+        }
+    }
+
+    if (text == "\n" || pos.x() >= textBoundingBox.right()) {
+        pos.rx() = textBoundingBox.left();
+        pos.ry() += lineSpacing;
+    }
+
+    if (pos.y() >= textBoundingBox.bottom() - lineSpacing) {
+        QMessageBox::critical(this, "", tr("Text is too big for the picture"));
+        return false;
+    }
+
+    return true;
 }

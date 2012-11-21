@@ -8,6 +8,7 @@ The program has an option to just show the image and the bounding boxes as red r
 
 The program currently supports only single page TIFF files.
 
+The program supports specifying multiple characters in a single bounding box - akin to ligatures. This means that instead of giving 2 bounding boxes for the 2 characters, it gives a single bounding box, but specifies the 2 characters as a character. These composite characters are entered in the plain text edit box to the right, separated by spaces.
 
 TODO:
 ------------------
@@ -15,7 +16,5 @@ TODO:
 Support multipage TIFF.
 
 Support full automation of the training process. This means it would call all the programs that come with Tesseract, and then install the resulting traineddata file in the tessdata directory.
-
-Support specifying multiple characters in a single bounding box - akin to ligatures. This means that instead of giving 2 bounding boxes for the 2 characters, it gives a single bounding box, but specifies the 2 characters as a character.
 
 Support viewing tif/box pairs where the boxes are applied as red rectangles.

@@ -22,7 +22,9 @@ private slots:
     void updatePlainTextEditFontSettings();
 
 private:
-    bool generateImageAndBoxData(const QString &text, const QFont &font, QImage &image, QList<BoxDataItem> &boxData);
+    QRect fitToImage(const QImage &image, const QRect &rect);
+    bool drawGlyph(QPainter &painter, const QString &text, const QRect &textBoundingBox, QPoint &pos, int lineSpacing, QList<BoxDataItem> &boxData);
+    bool generateImageAndBoxData(QPainter &painter, const QString &text, const QStringList &ligatures, const QRect &textBoundingBox, QList<BoxDataItem> &boxData);
     Ui::MainWindow *ui;
 };
 
