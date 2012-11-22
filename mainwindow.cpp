@@ -83,7 +83,10 @@ void MainWindow::on_pushButton_clicked()
         generator.saveTiffAndBoxFile(fileName);
         QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
     } else {
-        generator.saveTiffAndBoxFile(ui->lineEditOutputFile->text());
+        if (ui->lineEditOutputFile->text().isEmpty())
+            on_pushButtonBrowseOutputFile_clicked();
+        if (!ui->lineEditOutputFile->text().isEmpty())
+            generator.saveTiffAndBoxFile(ui->lineEditOutputFile->text());
     }
 }
 
