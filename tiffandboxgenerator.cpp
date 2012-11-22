@@ -79,8 +79,8 @@ bool TiffAndBoxGenerator::drawGlyph(const QString &text)
 
         QRect r;
         painter.drawText(QRect(pos.x(), pos.y(), textBoundingBox.width()-pos.x(), textBoundingBox.height()-pos.y()), 0, text, &r);
-        r = fitToImage(r);
         pos.rx() += r.width() * 3 / 2;
+        r = fitToImage(r);
 
         if (!r.isValid()) {
             m_error = "Invalid rectangle";
