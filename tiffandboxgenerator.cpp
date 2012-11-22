@@ -29,6 +29,7 @@ void TiffAndBoxGenerator::applyBoxesToImage()
 
 void TiffAndBoxGenerator::saveTiffAndBoxFile(const QString &fileName)
 {
+    qDebug() << fileName;
     image.save(fileName);
     QFile file(QString(fileName).replace(QRegExp("\\.[^\\.]*$"), ".box"));
     file.open(QIODevice::WriteOnly);

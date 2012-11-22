@@ -1,20 +1,38 @@
-The program creates the box/tiff pairs needed for training Tesseract OCR.
+The program has 3 modes:
 
-The input of the program comes from a plain text edit control. The text from that control is then rendered onto an image, and the resulting image and *.box file are saved in a directory chosen by the user.
+1. Generate - it saves a tiff/box pair in a directory chosen by the user.
 
-These font settings can be specified by the user - font name, font size in points, bold, italic, monospace and anti-aliasing. The output image resolution (in pixels) and DPI can be specified by the user. Setting DPI to zero will cause the default DPI to be used.
+2. Preview - it creates a tiff file in the temporary directory, and
+applies the bounding boxes as red rectangles, and shows them to the user.
+The program opens the image in the user's default viewer for TIFF files.
 
-The program has an option to just show the image and the bounding boxes as red rectangles. The program opens the image in the user's default viewer for TIFF files.
+3. Generate and install - it saves the tiff/box pair in a temporary directory,
+the name is specified by the user in an edit box, after which it saves the
+install script, specified by the user, and launches it
+
+------------------
+
+The input of the program comes from a plain text edit control. The text from
+that control is then rendered onto an image, and the resulting image and *.box
+file are saved in a directory chosen by the user.
+
+These font settings can be specified by the user - font name, font size in points,
+bold, italic, monospace and anti-aliasing. The output image resolution (in
+pixels) and DPI can be specified by the user. Setting DPI to zero will cause
+the default DPI to be used. When the values for any of these controls changes,
+the 2 plain text edit boxes fonts are automatically updated.
 
 The program currently supports only single page TIFF files.
 
-The program supports specifying multiple characters in a single bounding box - akin to ligatures. This means that instead of giving 2 bounding boxes for the 2 characters, it gives a single bounding box, but specifies the 2 characters as a character. These composite characters are entered in the plain text edit box to the right, separated by spaces.
+The program supports specifying multiple characters in a single bounding box -
+akin to ligatures. This means that instead of giving 2 bounding boxes for the
+2 characters, it gives a single bounding box, but specifies the 2 characters as a
+character. These composite characters are entered in the plain text edit box
+to the right, separated by spaces.
 
 TODO:
 ------------------
 
 Support multipage TIFF.
-
-Support full automation of the training process. This means it would call all the programs that come with Tesseract, and then install the resulting traineddata file in the tessdata directory.
 
 Support viewing tif/box pairs where the boxes are applied as red rectangles.

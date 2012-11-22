@@ -16,12 +16,15 @@ public:
     ~MainWindow();
     
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButtonGenerate_clicked();
     void updatePlainTextEditFontSettings();
 
-    void on_pushButtonBrowseOutputFile_clicked();
+    void on_pushButtonPreview_clicked();
+
+    void on_pushButtonGenerateAndInstall_clicked();
 
 private:
+    QString tempDir;
     Ui::MainWindow *ui;
 };
 
