@@ -36,7 +36,7 @@ void TiffAndBoxGenerator::saveTiffAndBoxFile(const QString &fileName)
     QTextStream stream(&file);
     stream.setCodec("UTF-8");
     foreach (BoxDataItem box, boxData) {
-        stream << QString("%1 %2 %3 %4 %5 0").arg(box.glyph).arg(box.boundingBox.left()).arg(image.height()-box.boundingBox.top()).arg(box.boundingBox.left() + box.boundingBox.width()).arg(image.height()-(box.boundingBox.top()+box.boundingBox.height())) << endl;
+        stream << QString("%1 %2 %3 %4 %5 0").arg(box.glyph).arg(box.boundingBox.left()).arg(image.height()-(box.boundingBox.top()+box.boundingBox.height())).arg(box.boundingBox.left() + box.boundingBox.width()).arg(image.height()-box.boundingBox.top()) << endl;
     }
 }
 
