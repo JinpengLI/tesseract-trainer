@@ -78,7 +78,7 @@ bool TiffAndBoxGenerator::drawGlyph(const QString &text)
             }
 
         QRect r;
-        painter.drawText(QRect(pos.x(), pos.y(), textBoundingBox.width()-pos.x(), textBoundingBox.height()-pos.y()), 0, text, &r);
+        painter.drawText(QRect(pos.x(), pos.y(), image.width()-pos.x(), image.height()-pos.y()), 0, text, &r);
         pos.rx() += r.width() * 3 / 2;
         r = fitToImage(r);
 
