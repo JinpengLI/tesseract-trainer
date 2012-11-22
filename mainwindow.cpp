@@ -71,6 +71,10 @@ struct BoxDataItem
 void MainWindow::on_pushButton_clicked()
 {
     TiffAndBoxGenerator generator(ui->lineEditImageWidth->text().toInt(), ui->lineEditImageHeight->text().toInt(), ui->lineEditImageDPI->text().toInt(), ui->plainTextEdit->toPlainText(), ui->plainTextEdit_2->toPlainText().split(' ', QString::SkipEmptyParts), ui->plainTextEdit->font());
+    if (!generator.error().isEmpty()) {
+        QMessageBox::critical(this, "", generator.error());
+        return;
+    }
     if (ui->checkBox->isChecked()) {
         generator.applyBoxesToImage();
         QString fileName = QDir::tempPath() + "/output.tif";

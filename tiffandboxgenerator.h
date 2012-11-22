@@ -11,6 +11,7 @@ public:
     TiffAndBoxGenerator(int width, int height, int dpi, const QString &text, const QStringList &ligatures, const QFont &font);
     void applyBoxesToImage();
     void saveTiffAndBoxFile(const QString &fileName);
+    const QString &error() { return m_error; }
 
 private:
     struct BoxDataItem
@@ -24,7 +25,7 @@ private:
     QPainter painter;
     QRect textBoundingBox;
     int lineSpacing;
-    QString error;
+    QString m_error;
     QRect fitToImage(const QRect &rect);
     bool drawGlyph(const QString &text);
     bool generateImageAndBoxData(const QString &text, const QStringList &ligatures);

@@ -73,7 +73,7 @@ bool TiffAndBoxGenerator::drawGlyph(const QString &text)
     if (text != "\n") {
         foreach (QChar ch, text)
             if (!painter.fontMetrics().inFont(ch)) {
-                error = "Invalid character - character missing from font";
+                m_error = "Invalid character - character missing from font";
                 return false;
             }
 
@@ -83,7 +83,7 @@ bool TiffAndBoxGenerator::drawGlyph(const QString &text)
         pos.rx() += r.width() * 3 / 2;
 
         if (!r.isValid()) {
-            error = "Invalid rectangle";
+            m_error = "Invalid rectangle";
             return false;
         }
 
@@ -99,7 +99,7 @@ bool TiffAndBoxGenerator::drawGlyph(const QString &text)
     }
 
     if (pos.y() >= textBoundingBox.bottom() - lineSpacing) {
-        error = "Text is too big for the picture";
+        m_error = "Text is too big for the picture";
         return false;
     }
 
