@@ -11,9 +11,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    tiffandboxgenerator.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    tiffandboxgenerator.h
 
 FORMS    += mainwindow.ui
 
