@@ -19,6 +19,8 @@ private slots:
     void on_pushButton_clicked();
     void updatePlainTextEditFontSettings();
 
+    void on_pushButtonBrowseOutputFile_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

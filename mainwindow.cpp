@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEditImageWidth->setText(settings.value("Image Width", 612).toString());
     ui->lineEditImageHeight->setText(settings.value("Image Height", 792).toString());
     ui->lineEditImageDPI->setText(settings.value("Image DPI", 600).toString());
+    ui->lineEditOutputFile->setText(settings.value("Last Saved File").toString());
     QFont font;
     if (font.fromString(settings.value("Font").toString()))
         ui->fontComboBox->setCurrentFont(font);
@@ -59,6 +60,7 @@ MainWindow::~MainWindow()
     settings.setValue("Image Width", ui->lineEditImageWidth->text());
     settings.setValue("Image Height", ui->lineEditImageHeight->text());
     settings.setValue("Image DPI", ui->lineEditImageDPI->text());
+    settings.setValue("Last Saved File", ui->lineEditOutputFile->text());
     delete ui;
 }
 
@@ -81,12 +83,7 @@ void MainWindow::on_pushButton_clicked()
         generator.saveTiffAndBoxFile(fileName);
         QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
     } else {
-        QSettings settings;
-        QString fileName = QFileDialog::getSaveFileName(this, "", settings.value("Last Saved File").toString(), "Images (*.tif *.png *.jpg)", 0);
-        if (!fileName.isEmpty()) {
-            settings.setValue("Last Saved File", fileName);
-            generator.saveTiffAndBoxFile(fileName);
-        }
+        generator.saveTiffAndBoxFile(ui->lineEditOutputFile->text());
     }
 }
 
@@ -101,4 +98,11 @@ void MainWindow::updatePlainTextEditFontSettings()
         font.setStyleStrategy(QFont::NoAntialias);
     ui->plainTextEdit->setFont(font);
     ui->plainTextEdit_2->setFont(font);
+}
+
+void MainWindow::on_pushButtonBrowseOutputFile_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "", ui->lineEditOutputFile->text(), "Images (*.tif *.png *.jpg)", 0);
+    if (!fileName.isEmpty())
+        ui->lineEditOutputFile->setText(fileName);
 }
